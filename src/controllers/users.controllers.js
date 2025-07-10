@@ -50,12 +50,26 @@ export const login=async(req,res,next)=>{
 }
 export const getUsersController=async(req,res,next)=>{
   try{
-    const users=await getUsers();
-    res.status(201).json(users);
+    if(req.user.admin){
+      const users=await getUsers();
+      res.status(201).json(users);
+    }else{
+      throw new Error("El usuario no es un administrador")
+    }
   }catch(error){
     next(error)
   }
 }
-export const getUserController=async (req,res,next)={
-  
+export const getUserController=async (req,res,next)=>{
+  try{
+    const {id}=req.params;
+    if(req.user.admin){
+      const user=await getUserController(id)
+      res.status(201).json(user);
+    }else{
+      throw new Error("El usuario no es un administrador")
+    }
+  }catch(error){
+    next(error)
+  }
 }

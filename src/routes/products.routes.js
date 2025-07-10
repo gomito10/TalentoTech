@@ -1,7 +1,7 @@
 import express from "express";
 import {Router} from "express";
 import {getProductsController,getProductByIdController,addProductController,updateProductController,getCategoryController,filterController,deleteDocument} from "../controllers/products.controllers.js"
-import {register,login} from "../controllers/users.controllers.js";
+import {register,login,getUsersController,getUserController} from "../controllers/users.controllers.js";
 import {verifyToken} from "../middlewares/products.middlewares.js";
 const router=Router();
 
@@ -14,4 +14,6 @@ router.get("/filter/:category",filterController);
 router.delete("/delete/:id",verifyToken,deleteDocument);
 router.post("/register",register);
 router.post("/login",login)
+router.get("/getUsers",verifyToken,getUsersController);
+router.get("getUser/:id",verifyToken,getUserController)
 export default router;
