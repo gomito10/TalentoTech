@@ -1,4 +1,4 @@
-import {registerUser,loginUser,getUsers,getUser} from "../models/users.model.js";
+import {registerUser,loginUser,getUsers,getUser,updateUser,deleteUser} from "../models/users.model.js";
 import {body,validationResult} from "express-validator";
 export const register=[
   body("username")
@@ -64,11 +64,30 @@ export const getUserController=async (req,res,next)=>{
   try{
     const {id}=req.params;
     if(req.user.admin){
-      const user=await getUserController(id)
+      const user=await getUser(id)
       res.status(201).json(user);
     }else{
       throw new Error("El usuario no es un administrador")
     }
+  }catch(error){
+    next(error)
+  }
+}
+export const update=async(req,res,next)=>{
+  try{
+    const {id}=req.params
+    const cambios=req.body
+    const update=await updateUser(id,cambios)
+    res.json(update)
+  }catch(error){
+    next(error)
+  }
+}
+export const removeUser=async(req,res,next)=>{
+  try{
+    const {id}=req.params;
+    const user=await deleteUser(id);
+    res.json(user);
   }catch(error){
     next(error)
   }

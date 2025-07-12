@@ -1,6 +1,6 @@
 import {db} from "../data/data.js";
 import {
-  collection,getDoc,getDocs,doc,addDoc,deleteDoc,updateDoc,query,where,orderBy
+  collection,getDoc,getDocs,doc,addDoc,deleteDoc,updateDoc,query,where,orderBy,startAt,endAt
 } from "firebase/firestore";
 
 const productionCollection=collection(db,"Products");
@@ -35,7 +35,7 @@ export const deleteProduct=async(id)=>{
   if(!product.exists()){
     throw new Error("El producto no existe")
   }
-  const productDelete=await deleteDoc(docRef);
+  await deleteDoc(docRef);
   return {message:"producto eliminado correctamente",id:product.id,...product.data()}
 }
 export const updateProduct=async(id,cambios)=>{
@@ -69,9 +69,25 @@ export const filterProducts=async({category,sortDirection,minPrice,maxPrice})=>{
   orderBy("price",sortDirection)
     );
     const products=await getDocs(q);
-    const array=products.docs.map((doc)=>({
+    const filtro=products.docs.map((doc)=>({
       id:doc.id,
       ...doc.data()
     }))
-    return array;
+    return filtro;
+}
+export const searchProducts=async({sortDirection,letter})=>{
+  const q=query(productionCollection,
+    orderBy("title"),
+    startAt(letter),
+    endAt(letter + "\uf8ff")
+  );
+  const products=await getDocs(q)
+  if(products.empty){
+    throw new Error("No hay productos con ese titulo")
+  }
+  const listProducts=products.docs.map((doc)=>({
+    id:doc.id,...doc.data()
+  }))
+  const ordered=listProducts.sort((a,b)=>sortDirection === "asc" ? a.price-b.price : b.price-a.price)
+  return ordered;
 }

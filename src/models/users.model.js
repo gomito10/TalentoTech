@@ -59,7 +59,31 @@ export const getUser=async(id)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
   if(!user.exists()){
-    throw new Error("El usyario no existe")
+    throw new Error("El usuario no existe")
   }
   return {id:user.id,...user.data()}
+}
+export const updateUser=async(id,cambios)=>{
+  const docRef=doc(userCollection,id);
+  const user=await getDoc(docRef);
+  const q=query(userCollection,where("username","==",cambios.username));
+  const document=await getDocs(q);
+  if(!user.exists){
+    throw new Error("El usuario no existe")
+  }
+  if(!document.empty){
+    throw new Error("El usuario ya está en uso")
+  }
+  await updateDoc(docRef,cambios);
+  return {message:"El usuario se ha actualizado correctamente",id:user.id,...user.data(),...cambios}
+}
+export const deleteUser=async(id)=>{
+  const docRef=doc(userCollection,id);
+  const user=await getDoc(docRef);
+  if(!user.exists()){
+    throw new Error("El usuario no existe")
+  }
+  await deleteDoc(docRef);
+  return {message:"Usuario elinado correctamente",id:user.id,...user.data()}
+
 }

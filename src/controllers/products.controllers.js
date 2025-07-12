@@ -1,4 +1,4 @@
-import {getProducts,getProductById,addProduct,updateProduct,getProductCategory,filterProducts,deleteProduct} from "../models/products.models.js";
+import {getProducts,getProductById,addProduct,updateProduct,getProductCategory,filterProducts,deleteProduct,searchProducts} from "../models/products.models.js";
 export const getProductsController=async(req,res,next)=>{
   try{
     const products=await getProducts();
@@ -69,6 +69,19 @@ export const deleteDocument=async(req,res,next)=>{
     const {id}=req.params;
     const product=await deleteProduct(id);
     res.status(201).json(product)
+  }catch(error){
+    next(error)
+  }
+}
+export const getProductByTitle=async(req,res,next)=>{
+  try{
+    const {letter,sort}=req.query;
+    const search={
+      letter:letter ?? null,
+      sortDirection:sort ?? "asc"
+    }
+    const product=await searchProducts(search)
+    res.status(201).json(product);
   }catch(error){
     next(error)
   }
