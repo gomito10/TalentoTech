@@ -38,15 +38,20 @@ export const deleteProduct=async(id)=>{
   await deleteDoc(docRef);
   return {message:"producto eliminado correctamente",id:product.id,...product.data()}
 }
-export const updateProduct=async(id,cambios)=>{
-  
+export const updateProduct=async(id,body)=>{
+  const keys=Object.keys(body);
 const docRef=doc(productionCollection,id);
   const product=await getDoc(docRef);
   if(!product.exists()){
     throw new Error("El producto no existe")
   }
-  await updateDoc(docRef,cambios)
-  return {message:"producto actualizado correctamente",id:docRef.id,...product.data(),...cambios}
+  if(keys[0] !== "price" || keys.length > 1){
+    throw new Error("Sólo puede actualizarce el campo precio")
+  }
+  const {price}=body;
+  await updateDoc(docRef,price);
+  const update=await getDoc(docRef);
+  return {message:"producto actualizado correctamente",id:docRef.id,...product.data(),...update.data()};
 }
 export const getProductCategory=async(category)=>{
   const docRef=query(productionCollection,where("category","==",category));

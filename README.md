@@ -6,7 +6,11 @@
 - Instalar dependencias: npm install.
 - Crear y configurar el archivo .env: FIREBASE_API_KEY=...
 JWT_SECRET=...
-4. Iniciar el servidor: npm run dev.
+
+---
+## Scripts disponibles
+- `npm run dev`: Inicia el servidor en modo desarrollo.
+- `npm run start`: Inicia el servidor en modo producción.
 
 ---
 ## 📲 Funcionalidades
@@ -38,6 +42,9 @@ JWT_SECRET=...
 - PATCH /updateUser/:id - Actualizardatos de usuario (requiere Token y ser admin).
 - DELETE /deleteUser/:id - Eliminar usuario (requiere Token h ser admin).
 
+### Usuario base para login
+username:LuisAlberto7
+password:Gomito10
 ---
 ## 🛠️ Tecnologías usadas
 - Node.js.
@@ -47,4 +54,17 @@ JWT_SECRET=...
 - Bcrypt (seguridad).
 - Dotenv (entorno).
 - Express-validator (validación).
-- 
+
+---
+## Enlaces
+- Github: [Repositorio TalentoTech](https://github.com/gomito10/TalentoTech)
+- Vercel: https://tu-app.vercel.app
+---
+## Documentación Swagger
+La API cuenta con documentación interactiva accesible en : http://localhost:5000/api-docs
+Incluye esquemas, rutas protegidas, validación de parámetros y pruebas en vivo.
+---
+## Autor
+**Luis Alberto Gómez**
+Desarrollador backend especial8zado en Express,Firestore y documentación Swagger.
+

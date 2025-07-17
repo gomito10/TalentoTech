@@ -1,50 +1,57 @@
 import {db} from "../data/data.js";
 import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
+import {generateToken} from "../utils/token-generator.js";
 import "dotenv/config"
 import {
   collection,getDoc,getDocs,doc,addDoc,deleteDoc,updateDoc,query,where,orderBy
 } from "firebase/firestore";
 
 const userCollection=collection(db,"Users");
-const JWT_SECRET=process.env.JWT_SECRET;
-
-export const registerUser=async({username,password,confirmPassword,email,admin})=>{
+const adminCollection=collection(db,"Admins");
+export const registerUser=async({username,password,confirmPassword,email,role})=>{
   const saltRound=10;
   const hashedPassword=await bcrypt.hash(password,saltRound);
   const saveUser={
     username,
     password:hashedPassword,
     email,
-    admin:admin || false,
+    role:role || "user",
     createAt:new Date().toISOString()
   }
-  const q=query(userCollection,where("username","==",username));
+  const roleCollection={
+    user:userCollection,
+    admin:adminCollection
+  };
+const q=query(userCollection,where("username","==",username));
   const getUser=await getDocs(q);
   if(!getUser.empty){
     throw new Error("El usuario ya existe")
   }
-  await addDoc(userCollection,saveUser)
+  if(!Object.keys(roleCollection).includes(saveUser.role)){
+    throw new Error(`rol inválido: ${saveUser.role} no está permitido`)
+  }
+  await addDoc(roleCollection[saveUser.role],saveUser)
   return {message:"Usuario registrado correctamente"}
 }
 export const loginUser=async(username,password)=>{
   const q=query(userCollection,where("username","==",username));
   const user=await getDocs(q);
   if(user.empty){
-    throw new Error("Usuario o Contraseña incorrecta ")
+    throw new Error("Usuario incorrecto")
   }
   const userDoc=user.docs[0];
   const userData=userDoc.data();
   const passwordMatch=await bcrypt.compare(password,userData.password);
   if(!passwordMatch){
-    throw new Error("Usuario o Contraseña incorrecta")
+    throw new Error("Contraseña incorrecta")
   }
   const payload={
-    uid:userDoc.id,
+    uid:userData.id,
     username:userData.username,
-    admin:userData.admin
+    role:userData.role
   }
-  const token=jsonwebtoken.sign(payload,JWT_SECRET,{expiresIn:"1h"})
+  const token=generateToken(payload)
   return {success:"login exitoso",token}
 }
 export const getUsers=async()=>{
