@@ -21,7 +21,7 @@ export const addProductController=[
   body("title")
   .trim()
   .notEmpty().withMessage("Completar este campo")
-  .isLength({min:3,max:25}).withMessage("Debe contener entre 3 y 25 carsctéres"),
+  .isLength({min:3,max:25}).withMessage("Debe contener entre 3 y 25 caractéres"),
   body("price")
   .trim()
   .notEmpty().withMessage("Completar este campo")
@@ -89,7 +89,7 @@ export const filterController=async(req,res,next)=>{
       minPrice: min !== undefined ? parseFloat(min) : 0
     }
     const productos=await filterProducts(filtros);
-    res.status(201).json(productos)
+    res.json(productos)
   }catch(error){
     next(error);
   }
@@ -107,11 +107,11 @@ export const getProductByTitle=async(req,res,next)=>{
   try{
     const {letter,sort}=req.query;
     const search={
-      letter:letter ?? null,
+      letter:letter ? letter : null,
       sortDirection:sort ?? "asc"
     }
     const product=await searchProducts(search)
-    res.status(201).json(product);
+    res.status(200).json({product,status:res.statusCode});
   }catch(error){
     next(error)
   }

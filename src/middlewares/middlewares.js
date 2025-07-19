@@ -15,9 +15,9 @@ export const verifyToken=async(req,res,next)=>{
     if(error.name === "TokenExpiredError"){
       return res.status(403).json({error:"El token ha expirado"})
     }
-    if(error.name === "jsonWebTokenError"){
+    if(error.name === "JsonWebTokenError"){
       return res.status(403).json({error:"El token es invalido"})
     }
-    return res.status(403).json({error:"Error al verificar el token"})
+    return res.status(403).json({error:"Error al verificar el token",message:error.name})
   }
 }

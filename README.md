@@ -31,7 +31,7 @@ JWT_SECRET=...
 - PATCH /updateProduct/:id - Actualizar un producto existente (requiere Token).
 - DELETE /delete/:id - Eliminar un producto (requiere Token).
 - GET /category/:category - Listar productos por categoría.
-- GET /filter/:category - Aplicar filtros dinámicos.
+- GET /filter/:category/?minPrice=30000&maxPrice=70000&sortDirection=asc - Aplicar filtros dinámicos.
 - GET /search/?letter=r&asc - Buscar producto por primera letra y ordenar por precio.
 
 ### usuarios
@@ -40,7 +40,7 @@ JWT_SECRET=...
 - GET /getUsers - Listar todos los usuarios (requiere Token y ser admin).
 - GET /getUser/:id - Obtemer un usuarion por ID (requiere Token y ser admin).
 - PATCH /updateUser/:id - Actualizardatos de usuario (requiere Token y ser admin).
-- DELETE /deleteUser/:id - Eliminar usuario (requiere Token h ser admin).
+- DELETE /deleteUser/:id - Eliminar usuario (requiere Token y ser admin).
 
 ### Usuario base para login
 username:LuisAlberto7
@@ -54,7 +54,7 @@ password:Gomito10
 - Bcrypt (seguridad).
 - Dotenv (entorno).
 - Express-validator (validación).
-
+- Swagger
 ---
 ## Enlaces
 - Github: [Repositorio TalentoTech](https://github.com/gomito10/TalentoTech)

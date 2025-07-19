@@ -43,7 +43,7 @@ export const login=async(req,res,next)=>{
   try{
     const{username,password}=req.body;
     const result=await loginUser(username,password)
-    res.status(201).json(result)
+    res.status(200).json(result)
   }catch(error){
     next(error)
   }
@@ -76,12 +76,15 @@ export const getUserController=async (req,res,next)=>{
 }
 export const update=[
   body("username")
+  .optional()
   .trim()
   .isLength({min:8,max:20}).withMessage("El usuario debe contener entre 8 y 20 caracteres"),
   body("email")
+  .optional()
   .trim()
   .isEmail().withMessage("Formato incorrecto"),
   body("passworord")
+  .optional()
   .trim()
   .isLength({min:8,max:20}).withMessage("Debe contener entre 8 y 20 caractéres"),
   async(req,res,next)=>{

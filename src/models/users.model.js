@@ -26,10 +26,14 @@ export const registerUser=async({username,password,confirmPassword,email,role})=
 const q=query(userCollection,where("username","==",username));
   const getUser=await getDocs(q);
   if(!getUser.empty){
-    throw new Error("El usuario ya existe")
+    const error= new Error("El usuario ya existe");
+    error.statusCode= 400;
+    throw error;
   }
   if(!Object.keys(roleCollection).includes(saveUser.role)){
-    throw new Error(`rol inválido: ${saveUser.role} no está permitido`)
+    const error= new Error(`rol inválido: ${saveUser.role} no está permitido`);
+    error.statusCode= 400;
+    throw error;
   }
   await addDoc(roleCollection[saveUser.role],saveUser)
   return {message:"Usuario registrado correctamente"}
@@ -38,13 +42,17 @@ export const loginUser=async(username,password)=>{
   const q=query(userCollection,where("username","==",username));
   const user=await getDocs(q);
   if(user.empty){
-    throw new Error("Usuario incorrecto")
+    const error= new Error("Usuario incorrecto");
+    error.statusCode= 400;
+    throw error;
   }
   const userDoc=user.docs[0];
   const userData=userDoc.data();
   const passwordMatch=await bcrypt.compare(password,userData.password);
   if(!passwordMatch){
-    throw new Error("Contraseña incorrecta")
+    const error= new Error("Contraseña incorrecta");
+    error.statusCode= 400;
+    throw error;
   }
   const payload={
     uid:userData.id,
@@ -55,18 +63,24 @@ export const loginUser=async(username,password)=>{
   return {success:"login exitoso",token}
 }
 export const getUsers=async()=>{
+  try{
     const getDocuments=await getDocs(userCollection);
     const users=getDocuments.docs.map((doc)=>({
       id:doc.id,
       ...doc.data()
     }));
     return users;
+  }catch(error){
+    throw new Error("Error al obtener usuarios");
+  }
 }
 export const getUser=async(id)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
   if(!user.exists()){
-    throw new Error("El usuario no existe")
+    const error= new Error("El usuario no existe");
+    error.statusCode= 404;
+    throw error;
   }
   return {id:user.id,...user.data()}
 }
@@ -75,11 +89,15 @@ export const updateUser=async(id,cambios)=>{
   const user=await getDoc(docRef);
   const q=query(userCollection,where("username","==",cambios.username));
   const document=await getDocs(q);
-  if(!user.exists){
-    throw new Error("El usuario no existe")
+  if(!user.exists()){
+    const error= new Error("El usuario no existe");
+    error.statusCode= 404;
+    throw error;
   }
   if(!document.empty){
-    throw new Error("El usuario ya está en uso")
+    const error= new Error("El usuario ya está en uso");
+    error.statusCode= 400;
+    throw error;
   }
   await updateDoc(docRef,cambios);
   return {message:"El usuario se ha actualizado correctamente",id:user.id,...user.data(),...cambios}
@@ -88,7 +106,9 @@ export const deleteUser=async(id)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
   if(!user.exists()){
-    throw new Error("El usuario no existe")
+    const error= new Error("El usuario no existe");
+    error.statusCode= 404;
+    throw error;
   }
   await deleteDoc(docRef);
   return {message:"Usuario elinado correctamente",id:user.id,...user.data()}

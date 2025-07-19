@@ -12,7 +12,10 @@ const options = {
     servers: [
       {
         url: 'http://localhost:5000/api', // ⚠️ Usar URL completa si querés probar en Swagger UI
-        description: 'Servidor local de desarrollo'
+        description: 'Servidor local para productos'
+      },{
+        url: 'http://localhost:5000/auth',//Usar URL completa si querés probar en Swagger UI
+        description: 'Servidor local para usuarios'
       }
     ],
     components: {
@@ -27,7 +30,7 @@ const options = {
         Producto: {
           type: 'object',
           properties: {
-            id: { type: 'string' },
+            description: { type: 'string' },
             title: { type: 'string' },
             price: { type: 'number' },
             category: { type: 'string' }

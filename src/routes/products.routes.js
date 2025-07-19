@@ -1,8 +1,17 @@
 import express from "express";
-import {Router} from "express";
-import {getProductsController,getProductByIdController,addProductController,updateProductController,getCategoryController,filterController,deleteDocument,getProductByTitle} from "../controllers/products.controllers.js";
-import {verifyToken} from "../middlewares/middlewares.js";
-const router=Router();
+import {
+  getProductsController,
+  getProductByIdController,
+  addProductController,
+  updateProductController,
+  getCategoryController,
+  filterController,
+  deleteDocument,
+  getProductByTitle,
+} from "../controllers/products.controllers.js";
+import { verifyToken } from "../middlewares/middlewares.js";
+
+const router = express.Router();
 
 /**
  * @swagger
@@ -20,6 +29,14 @@ const router=Router();
  *               type: array
  *               items:
  *                 $ref: "#/components/schemas/Producto"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error al obtener productos"
+ *               statusCode: 500
  */
 router.get("/products", getProductsController);
 
@@ -45,6 +62,20 @@ router.get("/products", getProductsController);
  *               $ref: "#/components/schemas/Producto"
  *       404:
  *         description: Producto no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Producto con ID no existente"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error interno del servidor"
+ *               statusCode: 500
  */
 router.get("/product/:id", getProductByIdController);
 
@@ -68,6 +99,28 @@ router.get("/product/:id", getProductByIdController);
  *         description: Producto creado
  *       400:
  *         description: Datos inválidos
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Campos obligatorios faltantes o incorrectos"
+ *               statusCode: 400
+ *       401:
+ *         description: Token faltante o inválido o vencido
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Token no proporcionado,incorrecto o caducado"
+ *               statusCode: 401
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error al guardar producto"
+ *               statusCode: 500
  */
 router.post("/addProduct", verifyToken, addProductController);
 
@@ -104,8 +157,36 @@ router.post("/addProduct", verifyToken, addProductController);
  *         description: Producto actualizado
  *       400:
  *         description: Campos inválidos
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Datos incompletos o incorrectos"
+ *               statusCode: 400
+ *       401:
+ *         description: Token faltante o inválido
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Token inválido"
+ *               statusCode: 401
  *       404:
  *         description: Producto no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Producto con ID no existente"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error al actualizar producto"
+ *               statusCode: 500
  */
 router.patch("/updateProduct/:id", verifyToken, updateProductController);
 
@@ -125,6 +206,22 @@ router.patch("/updateProduct/:id", verifyToken, updateProductController);
  *     responses:
  *       200:
  *         description: Productos encontrados
+ *       404:
+ *         description: Categoría no encontradoa
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "La categoría no 3xiste"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error al filtrar por categoría"
+ *               statusCode: 500
  */
 router.get("/category/:category", getCategoryController);
 
@@ -141,9 +238,52 @@ router.get("/category/:category", getCategoryController);
  *         required: true
  *         schema:
  *           type: string
+ *       - name: min
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *           example: 1000
+ *       - name: max
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *           example: 50000
+ *       - name: sortDirection
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *           default: asc
  *     responses:
  *       200:
  *         description: Productos filtrados
+ *       400:
+ *         description: Datos incorrectos
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "cadena de consulta mal formateada"
+ *               statusCode: 400
+ *       404:
+ *         description: Categoría no encontrada
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "No se encontraron productos"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error al filtrar productos"
+ *               statusCode: 500
  */
 router.get("/filter/:category", filterController);
 
@@ -165,8 +305,30 @@ router.get("/filter/:category", filterController);
  *     responses:
  *       200:
  *         description: Producto eliminado
+ *       401:
+ *         description: Token faltante o inválido
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Token requerido"
+ *               statusCode: 401
  *       404:
  *         description: Producto no encontrado
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Producto no existente"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error del servidor al eliminar producto"
+ *               statusCode: 500
  */
 router.delete("/delete/:id", verifyToken, deleteDocument);
 
@@ -178,16 +340,38 @@ router.delete("/delete/:id", verifyToken, deleteDocument);
  *     tags:
  *       - Productos
  *     parameters:
- *       - name: title
+ *       - name: letter
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
+ *           example: p
+ *       - name: sortDirection
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *           default: asc
  *     responses:
  *       200:
- *         description: Producto(s) encontrados
+ *         description: Productos encontrados
  *       404:
- *         description: No se encontraron productos
+ *         description: No se encontraron productos con ese título
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "No se encontraron coincidencias"
+ *               statusCode: 404
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: true
+ *               message: "Error del servidor al buscar productos"
+ *               statusCode: 500
  */
 router.get("/search", getProductByTitle);
 
