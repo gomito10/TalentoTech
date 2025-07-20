@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(specs));
 app.use("/api",router);
 app.use("/auth",authRouter);
-//app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname,"public")));
 app.use((req, res) => {
   const acceptsHTML = req.headers.accept?.includes("text/html");
   
