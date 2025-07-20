@@ -58,7 +58,7 @@ password:Gomito10
 ---
 ## Enlaces
 - Github: [Repositorio TalentoTech](https://github.com/gomito10/TalentoTech)
-- Vercel: https://tu-app.vercel.app
+- Vercel: https://talento-tech-iota.vercel.app
 ---
 ## Documentación Swagger
 La API cuenta con documentación interactiva accesible en : http://localhost:5000/api-docs
