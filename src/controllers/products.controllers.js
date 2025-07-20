@@ -98,7 +98,7 @@ export const deleteDocument=async(req,res,next)=>{
   try{
     const {id}=req.params;
     const product=await deleteProduct(id);
-    res.status(201).json(product)
+    res.status(200).json(product)
   }catch(error){
     next(error)
   }
