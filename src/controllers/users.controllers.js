@@ -52,7 +52,7 @@ export const getUsersController=async(req,res,next)=>{
   try{
     if(req.user.role === "admin"){
       const users=await getUsers();
-      res.status(201).json(users
+      res.status(200).json(users
       );
     }else{
       throw new Error("El usuario no es un administrador")
@@ -66,7 +66,7 @@ export const getUserController=async (req,res,next)=>{
     const {id}=req.params;
     if(req.user.role === "admin"){
       const user=await getUser(id)
-      res.status(201).json(user);
+      res.status(200).json(user);
     }else{
       throw new Error("El usuario no es un administrador")
     }
@@ -112,7 +112,7 @@ export const removeUser=async(req,res,next)=>{
     const user=await deleteUser(id);
     res.json(user);
     }else{
-     return res.status(401).json({error:"El usuario no es un administrador"});
+     return res.status(403).json({error:"El usuario no es un administrador"});
     }
   }catch(error){
     next(error)
