@@ -60,7 +60,7 @@ export const updateProductController=[
   try{
     const {id}=req.params;
     const product=await updateProduct(id,req.body)
-    res.status(201).json(product);
+    res.status(200).json(product);
   }catch(error){
     next(error)
   }
