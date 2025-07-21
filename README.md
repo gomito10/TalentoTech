@@ -61,7 +61,7 @@ password:Gomito10
 ---
 
 ## Estructura del proyecto
----
+```
 .
 ├── README.md
 ├── estructura.txt
@@ -84,7 +84,7 @@ password:Gomito10
 
 11 directories, 8 files
 
----
+```
 ## Enlaces
 - ## 🚀 Acceso al Proyecto
 
