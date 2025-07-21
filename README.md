@@ -120,7 +120,7 @@ npm run start
 - **Body (JSON)**:
 ```json
 {
-  "price": 330000
+  "price": 33000
 }
 ```
 - **Ejemplo de respuesta:**
@@ -313,7 +313,7 @@ npm run start
     "id": "2",
     "username": "Mariela000",
     "email": "mariela@example.com",
-    "role": "uset",
+    "role": "user",
     "password": "$2b$10$DtcE6ehyrCC7LIigxNL/7ubrR.F5kWG9QV.AxEwW/TnsahSS4FpZq",
     "createAt": "2025-07-21T12:04:04.710Z"
   },
