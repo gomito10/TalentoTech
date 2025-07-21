@@ -1,6 +1,8 @@
 # Proyecto TalentoTech (backend con Express y Firestore)
 - Este proyecto es una API RestFull construida con **Node.js**, **Express** y **Firestore**, diseñada para manejar productos,usuarios y autenticación segura.
+
 ---
+
 ## ⚙️ Instalación
 - Clonar el repositorio: bash git clone https://gomito10/TalentoTech.git.
 - Instalar dependencias: npm install.
@@ -55,15 +57,51 @@ password:Gomito10
 - Dotenv (entorno).
 - Express-validator (validación).
 - Swagger
+
+---
+
+## Estructura del proyecto
+---
+.
+├── README.md
+├── estructura.txt
+├── index.js
+├── package-lock.json
+├── package.json
+├── public
+│   ├── css
+│   ├── imaages
+│   └── notFound.html
+├── src
+│   ├── controllers
+│   ├── data
+│   ├── middlewares
+│   ├── models
+│   ├── routes
+│   └── utils
+├── swagger.js
+└── vercel.json
+
+11 directories, 8 files
+
 ---
 ## Enlaces
-- Github: [Repositorio TalentoTech](https://github.com/gomito10/TalentoTech)
-- Vercel: https://talento-tech-iota.vercel.app
+- ## 🚀 Acceso al Proyecto
+
+- 📦 Repositorio: [TalentoTech en GitHub](https://github.com/gomito10/TalentoTech)
+- 🌐 Deploy: [TalentoTech en Vercel](https://talento-tech-iota.vercel.app)
+
 ---
-## Documentación Swagger
-La API cuenta con documentación interactiva accesible en : http://localhost:5000/api-docs
+
+## 📘 Documentación Swagger
+
+La API cuenta con documentación interactiva accesible en:
+
+🔗 [https://talento-tech-iota.vercel.app/api-docs](https://talento-tech-iota.vercel.app/api-docs)
+
 Incluye esquemas, rutas protegidas, validación de parámetros y pruebas en vivo.
 ---
+
 ## Autor
 **Luis Alberto Gómez**
 Desarrollador backend especial8zado en Express,Firestore y documentación Swagger.
