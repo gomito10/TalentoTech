@@ -4,15 +4,24 @@
 ---
 
 ## ⚙️ Instalación
-- Clonar el repositorio: bash git clone https://gomito10/TalentoTech.git.
+- Clonar el repositorio: 
+```bash 
+git clone https://github.com/gomito10/TalentoTech.git
+```
 - Instalar dependencias: npm install.
 - Crear y configurar el archivo .env: FIREBASE_API_KEY=...
 JWT_SECRET=...
 
 ---
 ## Scripts disponibles
-- `npm run dev`: Inicia el servidor en modo desarrollo.
-- `npm run start`: Inicia el servidor en modo producción.
+- **Inicia el servidor en modo desarrollo:**
+```bash
+npm run dev
+```
+- **Inicia el servidor en modo producción:**
+```bash
+npm run start
+```
 
 ---
 ## 📲 Funcionalidades
@@ -43,7 +52,7 @@ JWT_SECRET=...
 ```json
 [
   {
-    "id": 1",
+    "id": 1,
     "title": "remera",
     "price": 23000,
     "category": "indumentaria",
@@ -123,8 +132,7 @@ JWT_SECRET=...
   "category": "indumentaria",
   "description": "ropa de invierno",
   "price": "33000",
-  "creatAt": "2025-07-16T00:57:30.597Z",
-  }
+  "creatAt": "2025-07-16T00:57:30.597Z"
 }
 ```
 
@@ -258,7 +266,7 @@ JWT_SECRET=...
   "id": "1",
   "username": "LuisAlberto7",
   "email": "luis@example.com",
-  "role":user
+  "role":"user"
   }
 }
 ```
