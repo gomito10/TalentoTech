@@ -276,7 +276,18 @@ npm run start
 ### 🔐 **Iniciar sesión**  
 - **Método:** `POST /login`  
 - **Parámetros:** en el cuerpo (`username` y `password`)  
-- **Ejemplo de uso:** `/auth/login`  
+- **Ejemplo de uso:** `/auth/login` 
+- **Usuario base para login**
+- **Body(JSON):**
+```json
+{
+ "username":"LuisAlberto7"
+ "password":"Gomito10"
+}
+```
+{
+  
+}
 - **Ejemplo de respuesta:**
 ```json
 {
@@ -377,13 +388,6 @@ npm run start
 }
 ```
 
-### Usuario base para login
-```json
-{
-- **username**:"LuisAlberto7"
-- **password**:"Gomito10"
-}
-```
 ---
 ## 🛠️ Tecnologías usadas
 - Node.js.

@@ -1,5 +1,7 @@
 import {registerUser,loginUser,getUsers,getUser,updateUser,deleteUser} from "../models/users.model.js";
 import {body,validationResult} from "express-validator";
+
+//Registrar usuario
 export const register=[
   body("username")
   .trim()
@@ -39,6 +41,7 @@ export const register=[
     next(error)
   }
 }]
+//Loguin de usuario
 export const login=async(req,res,next)=>{
   try{
     const{username,password}=req.body;
@@ -48,6 +51,7 @@ export const login=async(req,res,next)=>{
     next(error)
   }
 }
+//Obtener todos los usuarios
 export const getUsersController=async(req,res,next)=>{
   try{
     if(req.user.role === "admin"){
@@ -61,6 +65,7 @@ export const getUsersController=async(req,res,next)=>{
     next(error)
   }
 }
+//Obtener un usuario determinado
 export const getUserController=async (req,res,next)=>{
   try{
     const {id}=req.params;
@@ -74,6 +79,7 @@ export const getUserController=async (req,res,next)=>{
     next(error)
   }
 }
+//Actualizar usuario
 export const update=[
   body("username")
   .optional()
@@ -105,6 +111,7 @@ export const update=[
     next(error)
   }
 }]
+//Eliminar usuario
 export const removeUser=async(req,res,next)=>{
   try{
     const {id}=req.params;

@@ -17,10 +17,12 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(specs));
-app.use("/api",router);
-app.use("/auth",authRouter);
-app.use(express.static(path.join(__dirname,"public")));
+app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(specs));//middleware para acceder a la documentación Swagger
+app.use("/api",router);//prefijo para rutas sobre productos
+app.use("/auth",authRouter);//prefijo para rutas sobre usuarios
+app.use(express.static(path.join(__dirname,"public")));//middleware para acceder a la ubicación de mi archivo estático de ruta no encontrada
+
+//middleware para manejar la respuesta de una ruta no encontrada
 app.use((req, res) => {
   const acceptsHTML = req.headers.accept?.includes("text/html");
   
@@ -35,7 +37,8 @@ app.use((req, res) => {
     });
   }
 });
-app.use(errorHandler);
+
+app.use(errorHandler);//Middleware de manejo de errores
 app.listen(PORT,()=>{
   console.log(`Conección establecida en el puerto ${PORT}`)
 })

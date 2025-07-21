@@ -1,6 +1,8 @@
 import "dotenv/config";
 import jsonwebtoken from "jsonwebtoken";
 const JWT_SECRET=process.env.JWT_SECRET;
+
+//middleware para ruta protegida de autenticación de token
 export const verifyToken=async(req,res,next)=>{
   try{
     const authHeader=req.headers.authorization;

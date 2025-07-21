@@ -1,5 +1,6 @@
 import {getProducts,getProductById,addProduct,updateProduct,getProductCategory,filterProducts,deleteProduct,searchProducts} from "../models/products.models.js";
 import {body,validationResult} from "express-validator";
+//Obtener todos los productos
 export const getProductsController=async(req,res,next)=>{
   try{
     const products=await getProducts();
@@ -8,6 +9,7 @@ export const getProductsController=async(req,res,next)=>{
     next(error)
   }
 }
+//Obtener un producto determinado
 export const getProductByIdController=async(req,res,next)=>{
   try{
     const {id}=req.params;
@@ -17,6 +19,7 @@ export const getProductByIdController=async(req,res,next)=>{
     next(error)
   }
 }
+//Agregar un nuevo producto
 export const addProductController=[
   body("title")
   .trim()
@@ -46,7 +49,7 @@ export const addProductController=[
     next(error)
   }
 }]
-
+//Actualizar un producto específico
 export const updateProductController=[
   body("price")
   .trim()
@@ -65,6 +68,7 @@ export const updateProductController=[
     next(error)
   }
 }]
+//Filtrar productos por categoría
 export const getCategoryController=async(req,res,next)=>{
   try{
     const {category}=req.params;
@@ -74,6 +78,7 @@ export const getCategoryController=async(req,res,next)=>{
     next(error)
   }
 }
+//Ordenar productos por precio
 export const filterController=async(req,res,next)=>{
   try{
     const {category}=req.params;
@@ -94,6 +99,7 @@ export const filterController=async(req,res,next)=>{
     next(error);
   }
 }
+//Eliminar un producto
 export const deleteDocument=async(req,res,next)=>{
   try{
     const {id}=req.params;
@@ -103,6 +109,7 @@ export const deleteDocument=async(req,res,next)=>{
     next(error)
   }
 }
+//Obtener los producto que comiencen con una letra determinada
 export const getProductByTitle=async(req,res,next)=>{
   try{
     const {letter,sort}=req.query;

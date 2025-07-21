@@ -4,6 +4,8 @@ import {
 } from "firebase/firestore";
 
 const productionCollection=collection(db,"Products");
+
+//Obtener todos los productos
 export const getProducts=async()=>{
   try{
   const documentos=await getDocs(productionCollection);
@@ -15,6 +17,7 @@ export const getProducts=async()=>{
     throw errors;
   }
 }
+//Obtener un producto especifico
 export const getProductById=async (id)=>{
   const docRef=doc(productionCollection,id);
   const product=await getDoc(docRef);
@@ -25,6 +28,7 @@ export const getProductById=async (id)=>{
   }
   return {id:docRef.id,...product.data()}
 }
+//Agregar un nuevo producto
 export const addProduct=async(product)=>{
   try{
   const {title,price,category,description}=product;
@@ -48,6 +52,7 @@ export const addProduct=async(product)=>{
     throw error;
   }
 }
+//Eliminar un producto
 export const deleteProduct=async(id)=>{
   const docRef=doc(productionCollection,id);
   const product=await getDoc(docRef)
@@ -59,6 +64,7 @@ export const deleteProduct=async(id)=>{
   await deleteDoc(docRef);
   return {message:"producto eliminado correctamente",id:product.id,...product.data()}
 }
+//Actualizar un producto
 export const updateProduct=async(id,body)=>{
   const keys=Object.keys(body);
 const docRef=doc(productionCollection,id);
@@ -83,6 +89,7 @@ const docRef=doc(productionCollection,id);
   const update=await getDoc(docRef);
   return {message:"producto actualizado correctamente",id:docRef.id,...product.data(),...update.data()};
 }
+//Obtener productos de una determinada categoría
 export const getProductCategory=async(category)=>{
   const docRef=query(productionCollection,where("category","==",category));
   const documents=await getDocs(docRef)
@@ -98,6 +105,7 @@ export const getProductCategory=async(category)=>{
   }))
   return products;
 }
+//Ordenar por precio los productos de una determinada categoría 
 export const filterProducts=async({category,sortDirection,minPrice,maxPrice})=>{
   const q=query(productionCollection,
   where("price",">=",minPrice),
@@ -122,6 +130,7 @@ export const filterProducts=async({category,sortDirection,minPrice,maxPrice})=>{
     }))
     return filtro;
 }
+//Buscar productos por comienzo de letra
 export const searchProducts=async({sortDirection,letter})=>{
   let snapDocument;
   

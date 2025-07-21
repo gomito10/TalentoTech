@@ -9,6 +9,8 @@ import {
 
 const userCollection=collection(db,"Users");
 const adminCollection=collection(db,"Admins");
+
+//Registrar un usuario
 export const registerUser=async({username,password,confirmPassword,email,role})=>{
   const saltRound=10;
   const hashedPassword=await bcrypt.hash(password,saltRound);
@@ -38,6 +40,7 @@ const q=query(userCollection,where("username","==",username));
   const docRef=await addDoc(roleCollection[saveUser.role],saveUser)
   return {message:"Usuario registrado correctamente",user:{"id":docRef.id,"username":saveUser.username,"email":saveUser.email,"role":saveUser.role}}
 }
+//Loguin de usuario
 export const loginUser=async(username,password)=>{
   const q=query(userCollection,where("username","==",username));
   const user=await getDocs(q);
@@ -62,6 +65,7 @@ export const loginUser=async(username,password)=>{
   const token=generateToken(payload)
   return {success:"login exitoso",token}
 }
+//Obtener todos los usuarios
 export const getUsers=async()=>{
   try{
     const getDocuments=await getDocs(userCollection);
@@ -74,6 +78,7 @@ export const getUsers=async()=>{
     throw new Error("Error al obtener usuarios");
   }
 }
+//Obtener un usuario específico
 export const getUser=async(id)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
@@ -84,6 +89,7 @@ export const getUser=async(id)=>{
   }
   return {id:user.id,...user.data()}
 }
+//Actualizar usuario
 export const updateUser=async(id,cambios)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
@@ -102,6 +108,7 @@ export const updateUser=async(id,cambios)=>{
   await updateDoc(docRef,cambios);
   return {message:"El usuario se ha actualizado correctamente",id:user.id,...user.data(),...cambios}
 }
+//Eliminar usuario
 export const deleteUser=async(id)=>{
   const docRef=doc(userCollection,id);
   const user=await getDoc(docRef);
