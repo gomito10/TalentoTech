@@ -33,8 +33,9 @@ JWT_SECRET=...
 
 ## productos
 - GET /products
-### - Obtener todos los productos
-### - Ejemplo
+
+###  Obtener todos los productos
+### Ejemplo de respuesta
 ```
 [
  {
@@ -45,11 +46,45 @@ JWT_SECRET=...
  }
 ]
 ```
+### - Obtener un producto por ID.
+- GET /profuct/:id 
+- parametros:
+       - id (path,requerido) ID del producto
+- Ejemplo de uso: /product/1
+- ### Ejemplo de respuesta
+```
+{
+  "id":1,title:"camisa":category:"indumentaria","price":15000
+}
+```
+- POST /addProduct
 
-- GET /profuct/:id - Obtener un producto por ID.
-- POST /addProduct - Crear un nuevo producto (requiere Token).
-- PATCH /updateProduct/:id - Actualizar un producto existente (requiere Token).
-- DELETE /delete/:id - Eliminar un producto (requiere Token).
+### Crear un nuevo producto (requiere Token).
+- ### Ejemplo
+```
+{
+  id":3,"title":"campera","category":"abrigo",p yrice":38000
+}
+```
+- PATCH /updateProduct/:id
+
+### Actualizar un producto existente (requiere Token),sólo se puede Actualizar por precio.
+
+- Ejemplo
+```
+{
+  "price":27000
+}
+```
+- DELETE /delete/:id
+
+### Eliminar un producto (requiere Token).
+- ### Ejemplo
+```
+{
+     "id":1,title:"camisa":category:"indumentaria","price":15000
+}
+```
 - GET /category/:category - Listar productos por categoría.
 - GET /filter/:category/?minPrice=30000&maxPrice=70000&sortDirection=asc - Aplicar filtros dinámicos.
 - GET /search/?letter=r&asc - Buscar producto por primera letra y ordenar por precio.
