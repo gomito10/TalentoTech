@@ -248,16 +248,16 @@ npm run start
 - **Ejemplo de uso:** `/auth/register`
 - **Body (JSON)**:
 ```json
+
 {
-  {
  "username":"LuisAlberto7",
  "email":"luis@example.com",
  "password":"******",
  "confirmPassword":"******",
  "role":"user"
 }
-}
 ```
+
 - **Ejemplo de respuesta:**
 ```json
 {
@@ -268,7 +268,6 @@ npm run start
   "email": "luis@example.com",
   "role":"user"
   }
-}
 ```
 
 ---
@@ -285,9 +284,6 @@ npm run start
  "password":"Gomito10"
 }
 ```
-{
-  
-}
 - **Ejemplo de respuesta:**
 ```json
 {
