@@ -26,8 +26,26 @@ JWT_SECRET=...
 
 ---
 ## Endpoints principales
-### productos
-- GET /products - Listar todos los productos.
+-Todas las rutas están organizadas con los siguientes prefijos:
+
+- 🛒 `/api` → para operaciones con productos
+- 👤 `/auth` → para usuarios y autenticación
+
+## productos
+- GET /products
+### - Obtener todos los productos
+### - Ejemplo
+```
+[
+ {
+   "id":1,title:"camisa":category:"indumentaria","price":15000
+ },
+ {
+   "id":2,"title":"zapatilla deportiva","category":"calzado",price":45000
+ }
+]
+```
+
 - GET /profuct/:id - Obtener un producto por ID.
 - POST /addProduct - Crear un nuevo producto (requiere Token).
 - PATCH /updateProduct/:id - Actualizar un producto existente (requiere Token).
