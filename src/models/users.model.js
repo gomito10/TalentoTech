@@ -16,7 +16,7 @@ export const registerUser=async({username,password,confirmPassword,email,role})=
     username,
     password:hashedPassword,
     email,
-    role:role || "user",
+    role:role,
     createAt:new Date().toISOString()
   }
   const roleCollection={
@@ -35,8 +35,8 @@ const q=query(userCollection,where("username","==",username));
     error.statusCode= 400;
     throw error;
   }
-  await addDoc(roleCollection[saveUser.role],saveUser)
-  return {message:"Usuario registrado correctamente"}
+  const docRef=await addDoc(roleCollection[saveUser.role],saveUser)
+  return {message:"Usuario registrado correctamente",user:{"id":docRef.id,"username":saveUser.username,"email":saveUser.email,"role":saveUser.role}}
 }
 export const loginUser=async(username,password)=>{
   const q=query(userCollection,where("username","==",username));
