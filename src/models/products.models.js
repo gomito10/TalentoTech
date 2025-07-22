@@ -103,6 +103,18 @@ export const filterProducts = async ({ category, sortDirection, minPrice, maxPri
     throw error;
   }
 
+  // Primero traemos todos los productos de la categoría sin filtrar por precio
+  const snapshotCategoria = await getDocs(
+    query(productionCollection, where("category", "==", category))
+  );
+
+  if (snapshotCategoria.empty) {
+    const error = new Error("La categoría no tiene existe");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Ahora aplicamos el filtro completo
   const q = query(
     productionCollection,
     where("price", ">=", minPrice),
@@ -111,31 +123,20 @@ export const filterProducts = async ({ category, sortDirection, minPrice, maxPri
     orderBy("price", sortDirection)
   );
 
-  const products = await getDocs(q);
+  const snapshotFiltrado = await getDocs(q);
 
-  if (products.empty) {
-    const error = new Error("No se encontraron productos en esa categoría con ese rango de precios");
+  if (snapshotFiltrado.empty) {
+    const error = new Error("No hay productos en esta categoría que cumplan con el precio mínimo solicitado");
     error.statusCode = 404;
     throw error;
   }
 
-  const minimos = products.docs.some((item) => {
-    const data = item.data();
-    return Number(data.price) >= Number(minPrice);
-  });
-
-  if (!minimos) {
-    const error = new Error("No hay productos que cumplan con el precio mínimo solicitado");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  const filtro = products.docs.map((doc) => ({
+  const productos = snapshotFiltrado.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   }));
 
-  return filtro;
+  return productos;
 };
 //Buscar productos por comienzo de letra
 export const searchProducts=async({sortDirection,letter})=>{
