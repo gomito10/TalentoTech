@@ -6,17 +6,10 @@ import {
 const productionCollection=collection(db,"Products");
 
 //Obtener todos los productos
-export const getProducts=async()=>{
-  try{
-  const documentos=await getDocs(productionCollection);
-  const products=documentos.docs.map((doc)=>({id:doc.id,...doc.data()}))
-  return products;
-  }catch(error){
-    const errors= new Error("Error en el servidor al obtener productos");
-    errors.statusCode= 500;
-    throw errors;
-  }
-}
+export const getProducts = async () => {
+  const snapshot = await getDocs(productionCollection);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
 //Obtener un producto especifico
 export const getProductById=async (id)=>{
   const docRef=doc(productionCollection,id);
@@ -29,29 +22,26 @@ export const getProductById=async (id)=>{
   return {id:docRef.id,...product.data()}
 }
 //Agregar un nuevo producto
-export const addProduct=async(product)=>{
-  try{
-  const {title,price,category,description}=product;
-  const saveProduct={
+export const addProduct = async (product) => {
+  const { title, price, category, description } = product;
+
+  if (!title || !price || !category || !description) {
+    const error = new Error("Debe completar todos los campos");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const saveProduct = {
     title,
     price,
     category,
     description,
-    creatAt:new Date().toISOString()
-  }
-  if(!title  || !price || !category || !description){
-    const error= new Error("Debe comoletar todos los campos");
-    error.statusCode= 400;
-    throw error;
-  }
-  const docRef=await addDoc(productionCollection,saveProduct);
-  return `producto ${docRef.id} agregado correctamente`
-  }catch(error){
-    const errors= new Error("Formato inválido");
-    errors.statusCode= 400;
-    throw error;
-  }
-}
+    createdAt: new Date().toISOString()
+  };
+
+  const docRef = await addDoc(productionCollection, saveProduct);
+  return `Producto '${saveProduct.title}' agregado correctamente`;
+};
 //Eliminar un producto
 export const deleteProduct=async(id)=>{
   const docRef=doc(productionCollection,id);
@@ -98,38 +88,55 @@ export const getProductCategory=async(category)=>{
     error.statusCode= 404;
     throw error;
   }
- const productsCategory=await getDocs(docRef)
-  const products=productsCategory.docs.map((doc)=>({
+ 
+  const products=documents.docs.map((doc)=>({
     id:doc.id,
     ...doc.data()
   }))
   return products;
 }
 //Ordenar por precio los productos de una determinada categoría 
-export const filterProducts=async({category,sortDirection,minPrice,maxPrice})=>{
-  const q=query(productionCollection,
-  where("price",">=",minPrice),
-  where("price","<=",maxPrice),
-  where("category","==",category),
-  orderBy("price",sortDirection)
-    );
-    if (minPrice < 0){
-      const error= new Error("El precio mínimo debe ser mayor a 0");
-      error.statusCode= 400;
-      throw error;
-    }
-    const products=await getDocs(q);
-    if(products.empty){
-      const error= new Error("La categoria no existe");
-      error.statusCode= 404;
-      throw error;
-    }
-    const filtro=products.docs.map((doc)=>({
-      id:doc.id,
-      ...doc.data()
-    }))
-    return filtro;
-}
+export const filterProducts = async ({ category, sortDirection, minPrice, maxPrice }) => {
+  if (minPrice < 0) {
+    const error = new Error("El precio mínimo debe ser mayor a 0");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const q = query(
+    productionCollection,
+    where("price", ">=", minPrice),
+    where("price", "<=", maxPrice),
+    where("category", "==", category),
+    orderBy("price", sortDirection)
+  );
+
+  const products = await getDocs(q);
+
+  if (products.empty) {
+    const error = new Error("No se encontraron productos en esa categoría con ese rango de precios");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const minimos = products.docs.some((item) => {
+    const data = item.data();
+    return Number(data.price) >= Number(minPrice);
+  });
+
+  if (!minimos) {
+    const error = new Error("No hay productos que cumplan con el precio mínimo solicitado");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const filtro = products.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  return filtro;
+};
 //Buscar productos por comienzo de letra
 export const searchProducts=async({sortDirection,letter})=>{
   let snapDocument;
@@ -152,6 +159,6 @@ export const searchProducts=async({sortDirection,letter})=>{
   const listProducts=snapDocument.docs.map((doc)=>({
     id:doc.id,...doc.data()
   }))
-  const ordered=listProducts.sort((a,b)=>sortDirection === "asc" ? a.price-b.price : b.price-a.price)
+  const ordered=listProducts.sort((a,b)=>sortDirection === "asc" ? Number(a.price) - Number(b.price) : Number(b.price) - Number(a.price))
   return ordered;
 }

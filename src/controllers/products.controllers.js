@@ -1,14 +1,21 @@
 import {getProducts,getProductById,addProduct,updateProduct,getProductCategory,filterProducts,deleteProduct,searchProducts} from "../models/products.models.js";
 import {body,validationResult} from "express-validator";
 //Obtener todos los productos
-export const getProductsController=async(req,res,next)=>{
-  try{
-    const products=await getProducts();
-    res.json(products);
-  }catch(error){
-    next(error)
+export const getProductsController = async (req, res, next) => {
+  try {
+    const products = await getProducts();
+
+    if (products.length === 0) {
+      const error = new Error("La colección de productos está vacía");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
   }
-}
+};
 //Obtener un producto determinado
 export const getProductByIdController=async(req,res,next)=>{
   try{
@@ -84,14 +91,14 @@ export const filterController=async(req,res,next)=>{
     const {category}=req.params;
     const {
       sortDirection,
-      max,
-      min
+      maxPrice,
+      minPrice
     }=req.query;
     const filtros={
       category:category,
       sortDirection:sortDirection || "asc",
-      maxPrice: max !== undefined ? parseFloat(max) : Infinity,
-      minPrice: min !== undefined ? parseFloat(min) : 0
+      maxPrice: parseFloat(maxPrice) || Infinity,
+      minPrice: parseFloat(minPrice) || 1000
     }
     const productos=await filterProducts(filtros);
     res.json(productos)
@@ -112,10 +119,10 @@ export const deleteDocument=async(req,res,next)=>{
 //Obtener los producto que comiencen con una letra determinada
 export const getProductByTitle=async(req,res,next)=>{
   try{
-    const {letter,sort}=req.query;
+    const {letter,sortDirection}=req.query;
     const search={
       letter:letter ? letter : null,
-      sortDirection:sort ?? "asc"
+      sortDirection:sortDirection || "asc"
     }
     const product=await searchProducts(search)
     res.status(200).json({product,status:res.statusCode});

@@ -8,7 +8,6 @@ import {
 } from "firebase/firestore";
 
 const userCollection=collection(db,"Users");
-const adminCollection=collection(db,"Admins");
 
 //Registrar un usuario
 export const registerUser=async({username,password,confirmPassword,email,role})=>{
@@ -18,13 +17,9 @@ export const registerUser=async({username,password,confirmPassword,email,role})=
     username,
     password:hashedPassword,
     email,
-    role:role,
+    role,
     createAt:new Date().toISOString()
   }
-  const roleCollection={
-    user:userCollection,
-    admin:adminCollection
-  };
 const q=query(userCollection,where("username","==",username));
   const getUser=await getDocs(q);
   if(!getUser.empty){
@@ -32,12 +27,13 @@ const q=query(userCollection,where("username","==",username));
     error.statusCode= 400;
     throw error;
   }
-  if(!Object.keys(roleCollection).includes(saveUser.role)){
+const validRoles=["user","admin"];
+  if(!validRoles.includes(role)){
     const error= new Error(`rol inválido: ${saveUser.role} no está permitido`);
     error.statusCode= 400;
     throw error;
   }
-  const docRef=await addDoc(roleCollection[saveUser.role],saveUser)
+  const docRef=await addDoc(userCollection,saveUser)
   return {message:"Usuario registrado correctamente",user:{"id":docRef.id,"username":saveUser.username,"email":saveUser.email,"role":saveUser.role}}
 }
 //Loguin de usuario

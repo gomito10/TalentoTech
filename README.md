@@ -161,7 +161,8 @@ npm run start
 ### 🧩 **Listar productos por categoría**  
 - **Método:** `GET /category/:category`  
 - **Parámetros:**  
-  - `category` (path, requerido): nombre de categoría.  
+  - `category` (path, requerido): nombre de categoría.
+- **Categorías:** (indumentaria,calzado,tecnologia)
 - **Ejemplo de uso:** `/api/category/indumentaria`  
 - **Ejemplo de respuesta:**
 ```json
@@ -188,19 +189,20 @@ npm run start
 ---
 
 ### 🎛️ **Aplicar filtros dinámicos**  
-- **Método:** `GET /filter/:category`  
+- **Método:** `GET /filter/:category`
+-  **Categorías:** (indumentaria,calzado,tecnologia)
 - **Parámetros:**  
-  - `category` (path, requerido).  
+  - `category` (path, requerido).
   - `min`, `max`, `sortDirection (asc o desc)` (query).  
-- **Ejemplo de uso:** `/api/filter/pantallas?min=30000&max=70000&sortDirection=asc`  
+- **Ejemplo de uso:** `/api/filter/tecnologia/?min=30000&max=70000&sortDirection=asc`  
 - **Ejemplo de respuesta:**
 ```json
 [
   {
-    "id": "7",
-    "title": "Monitor 24 pulgadas",
-    "price": 54000,
-    "category": "pantallas"
+    "id": "3",
+    "title": "notebook",
+    "price": 890000,
+    "category": "tecnologia"
   }
 ]
 ```
@@ -277,11 +279,17 @@ npm run start
 - **Parámetros:** en el cuerpo (`username` y `password`)  
 - **Ejemplo de uso:** `/auth/login` 
 - **Usuario base para login**
-- **Body(JSON):**
+- **Body(JSON):** login para administrador
 ```json
 {
  "username":"LuisAlberto7"
- "password":"Gomito10"
+ "password":"gomito10"
+}
+```
+```json
+{
+  "username":"Eduardo44",
+  "password":"EduGomez"
 }
 ```
 - **Ejemplo de respuesta:**
